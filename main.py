@@ -61,7 +61,8 @@ def make_sentence(model, sentence_num, seed="[BOS]", max_words = 1000):
             sentence_count += 1
             if sentence_count == sentence_num:
                 break
-    return sentence
+    cleaned_sentence = sentence.replace(seed, "")
+    return cleaned_sentence
 
 @app.route("/")
 def main():
