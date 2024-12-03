@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Typing Effect</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            background-color: #f0f0f0;
+        }
+        .typing-container {
+            font-size: 1.5rem;
+            color: #333;
+            white-space: pre-wrap;
+            display: inline-block;
+        }
+        .cursor {
+            display: inline-block;
+            font-weight: bold;
+            color: black;
+            animation: blink-cursor 0.5s step-end infinite;
+        }
+        @keyframes blink-cursor {
+            from, to {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="typing-container">
+        <span id="typing"></span><span class="cursor">|</span>
+    </div>
+
+    <script>
+        // タイピングエフェクト
+        const text = {{ result|tojson }}; // Flaskから渡されたメッセージを取得
+        const typingElement = document.getElementById("typing");
+        let index = 0;
+
+        function type() {
+            if (index < text.length) {
+                typingElement.textContent += text[index];
+                index++;
+                setTimeout(type, 100); // 一文字ずつ表示（100ms間隔）
+            }
+        }
+
+        // 初期化処理
+        document.addEventListener("DOMContentLoaded", () => {
+            type();
+        });
+    </script>
+</body>
+</html>

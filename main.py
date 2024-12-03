@@ -103,7 +103,7 @@ def view_result():
   sentence_num = 1
   result += get_result(selected_options, step, order, sentence_num)
   result += "(@-@)おしまい。"
-  return result
+  return render_template("result.html", result = result)
 
 #最初に表示される部分
 @app.route("/")
