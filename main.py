@@ -94,7 +94,7 @@ def view_result():
   #middleについての文章生成
   step = "middle.txt"
   order = 2
-  sentence_num = 20
+  sentence_num = 15
   result += get_result(selected_options, step, order, sentence_num)
   result += "(@-@)"
   #endについての文章生成
