@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template, request
 from collections import deque
 import re
 import MeCab
@@ -80,8 +80,9 @@ def get_result(current_dir, storytype_1, storytype_2, step, order, sentence_num)
   return make_sentence(model, sentence_num)
 
 
-@app.route("/")
-def main():
+@app.route("/view_result", methods = ["POST"])
+def view_result():
+  selected_options = request.form.getlist('options')
   current_dir = os.path.dirname(__file__)
   storytype_1 = "issunbousi"
   storytype_2 = "hanasaka"
@@ -105,3 +106,11 @@ def main():
   result += get_result(current_dir, storytype_1, storytype_2, step, order, sentence_num)
   result += "(@-@)おしまい。"
   return result
+
+#最初に表示される部分
+@app.route("/")
+def view_form():
+  return render_template("index.html")
+  
+
+#@app.route("/sampleform", methods = ["GET", "POST"])
