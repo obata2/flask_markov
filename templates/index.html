@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>元となる昔話の選択画面</title>
+</head>
+<body>
+    <h1>Choose Your Options</h1>
+    <form action="/view_result" method="POST">
+        <label>
+            <input type="checkbox" name="options" value="hanasaka">
+            花咲かじいさん
+        </label><br>
+        <label>
+            <input type="checkbox" name="options" value="issunbousi">
+            一寸法師
+        </label><br>
+        <label>
+            <input type="checkbox" name="options" value="urasima">
+            浦島太郎
+        </label><br>
+        <label>
+            <input type="checkbox" name="options" value="kaguyahime">
+            かぐや姫
+        </label><br>
+        
+
+        <button type="submit">生成開始</button>
+    </form>
+</body>
+</html>
