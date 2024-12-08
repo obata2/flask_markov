@@ -90,19 +90,17 @@ def view_result():
   order = 1
   sentence_num = 1
   result += get_result(selected_options, step, order, sentence_num)
-  result += "(@-@)"
   #middleについての文章生成
   step = "middle.txt"
   order = 2
   sentence_num = 15
   result += get_result(selected_options, step, order, sentence_num)
-  result += "(@-@)"
   #endについての文章生成
   step = "end.txt"
   order = 1
   sentence_num = 1
   result += get_result(selected_options, step, order, sentence_num)
-  result += "(@-@)おしまい。"
+  result += "おしまい。"
   return render_template("result.html", result = result)
 
 #最初に表示される部分
