@@ -81,32 +81,21 @@ def get_result(selected_options, step, order, sentence_num):
   return make_sentence(model, sentence_num)
 
 
+@app.route("/")
+def view_form():
+  return render_template("index.html")
+
 @app.route("/view_result", methods = ["POST"])
 def view_result():
   selected_options = request.form.getlist('options')
   result = ""
-  #beginningについての文章生成
-  step = "beginning.txt"
-  order = 1
-  sentence_num = 1
-  result += get_result(selected_options, step, order, sentence_num)
-  #middleについての文章生成
-  step = "middle.txt"
-  order = 2
-  sentence_num = 15
-  result += get_result(selected_options, step, order, sentence_num)
-  #endについての文章生成
-  step = "end.txt"
-  order = 1
-  sentence_num = 1
-  result += get_result(selected_options, step, order, sentence_num)
+  container = [
+     ["beginning.txt", 1, 1],
+     ["middle.txt", 2, 15],
+     ["end.txt", 1, 1]
+  ]
+  for i in range(0, 3):
+    step, order, sentence_num = container[i]
+    result += get_result(selected_options, step, order, sentence_num)
   result += "おしまい。"
   return render_template("result.html", result = result)
-
-#最初に表示される部分
-@app.route("/")
-def view_form():
-  return render_template("index.html")
-  
-
-#@app.route("/sampleform", methods = ["GET", "POST"])
