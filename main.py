@@ -7,25 +7,25 @@ import os
 
 app = Flask(__name__)
 
-#いくつもの文章を分かち書きし、要素をリストに格納する
-def wakati(text):
+#文章を分かち書きし、要素をwordlistに格納する
+def wakati(text_total):
     t = MeCab.Tagger("-Owakati")
     parsed_text = ""
-    for one_line_text in one_sentence_generator(text):
+    for one_line_text in one_sentence_generator(text_total):
         parsed_text += " "
         parsed_text += t.parse(one_line_text)
     wordlist = parsed_text.rstrip("\n").split(" ")
     return wordlist
 #1つずつの文章に区切って渡す
-def one_sentence_generator(long_text):
-    sentences = re.findall(".*?。", long_text)
+def one_sentence_generator(text_total):
+    sentences = re.findall(".*?。", text_total)
     for sentence in sentences:
         yield sentence
 
 #マルコフ連鎖用のモデルを生成する
-def make_model(text, order):
+def make_model(text_total, order):
     model = {}
-    wordlist = wakati(text)
+    wordlist = wakati(text_total)
     queue = deque([], order)
     queue.append("[BOS]")
     for markov_value in wordlist:
@@ -66,19 +66,10 @@ def make_sentence(model, sentence_num, seed="[BOS]", max_words = 1000):
     return result
 
 #適切なファイルパスを指定し、テキストデータを返す
-def get_text(current_dir, text_i, step):
-  path = os.path.join(current_dir, "texts", text_i, step)
+def get_text(current_dir, text, step):
+  path = os.path.join(current_dir, "texts", text, step)
   with open(path, "r", encoding="utf-8") as file:
     return file.read()
-  
-#stepに応じて、"テキストデータの取得→文章生成→return" の一連の流れを行う
-def get_result(selected_options, step, order, sentence_num):
-  text_sum = ""
-  current_dir = os.path.dirname(__file__)
-  for text_i in selected_options:
-    text_sum += get_text(current_dir, text_i, step)
-  model = make_model(text_sum, order)
-  return make_sentence(model, sentence_num)
 
 
 @app.route("/")
@@ -89,6 +80,7 @@ def view_form():
 def view_result():
   selected_options = request.form.getlist('options')
   result = ""
+  current_dir = os.path.dirname(__file__)
   container = [
      ["beginning.txt", 1, 1],
      ["middle.txt", 2, 15],
@@ -96,6 +88,10 @@ def view_result():
   ]
   for i in range(0, 3):
     step, order, sentence_num = container[i]
-    result += get_result(selected_options, step, order, sentence_num)
+    text_total = ""
+    for text in selected_options:
+      text_total += get_text(current_dir, text, step)
+    model = make_model(text_total, order)
+    result += make_sentence(model, sentence_num)
   result += "おしまい。"
   return render_template("result.html", result = result)
